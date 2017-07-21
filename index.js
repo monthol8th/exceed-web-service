@@ -5,6 +5,11 @@ var redis = new Redis();
 var bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 app.get('/',function(req, res){
    res.send("root path"); 
@@ -37,7 +42,7 @@ app.get('/data/:key/set/:value', function(req, res){
 
 app.get('/data/:namespace/:key/set/:value', function(req,res){
     redis.set(req.params.namespace+'_'+req.params.key, req.params.value)
-    res.send(res);    
+    res.send('OK');    
 })
 
 app.get('/json/:name', function(req, res){
@@ -59,6 +64,6 @@ app.post('/json/:name', function(req, res){
     res.json(req.body);
 })
 
-app.listen(3000,function(){
-    console.log('listen on port 3000');
+app.listen(80,function(){
+    console.log('listen on port 8080');
 })
