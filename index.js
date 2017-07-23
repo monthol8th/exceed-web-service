@@ -30,6 +30,16 @@ app.get('/data/:namespace/:key', function(req, res){
     })
 })
 
+
+app.post('/data/:namespace', function(req, res){
+    for(key in req.body){
+        console.log(key+":"+req.body[key])
+        redis.set(req.params.namespace+'_'+key,req.body[key]);
+    }
+    res.json(req.body);
+})
+
+
 app.get('/data/:key/set/:value', function(req, res){
     redis.set(req.params.key, req.params.value);
     res.send(req.params.value);
@@ -37,7 +47,7 @@ app.get('/data/:key/set/:value', function(req, res){
 
 app.get('/data/:namespace/:key/set/:value', function(req,res){
     redis.set(req.params.namespace+'_'+req.params.key, req.params.value)
-    res.send(res);    
+    res.send("ok");    
 })
 
 app.get('/json/:name', function(req, res){
@@ -59,6 +69,6 @@ app.post('/json/:name', function(req, res){
     res.json(req.body);
 })
 
-app.listen(3000,function(){
-    console.log('listen on port 3000');
+app.listen(8000,function(){
+    console.log('listen on port 8000');
 })
